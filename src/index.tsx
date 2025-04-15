@@ -5,7 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
 import App from "./app/App";
-import theme from "./theme";
+import theme from "./app/MaterialTheme";
 import reportWebVitals from "./reportWebVitals";
 import "./css/index.css";
 
