@@ -60,7 +60,6 @@ export default function HomeNavbar() {
               <img
                 src="/icons/default-user.svg"
                 alt="memberImage"
-                aria-haspopup="true"
                 className="user-avatar"
               />
             )}

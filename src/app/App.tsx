@@ -14,7 +14,7 @@ import "../css/navbar.css";
 import { HelpPage } from "./screens/helpPage/Index";
 
 function App() {
-  const location = useLocation(); // (/)
+  const location = useLocation();
 
   return (
     <>
