@@ -12,7 +12,6 @@ import Footer from "./components/footers/FooterIndex";
 import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
-import "../css/homePage.css";
 import HelpPage from "./screens/helpPage/Index";
 
 function App() {
