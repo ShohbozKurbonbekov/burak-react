@@ -263,3 +263,68 @@
   transform: scale(1.5);
   overflow: hidden;
 }
+
+/* ACTIVE USERS*/
+.homePage .active-users-frame {
+  margin-top: 93px;
+  width: 100%;
+  height: auto;
+  background-color: inherit;
+}
+.homePage .active-users-frame .active-users-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.homePage .active-users-frame .active-users-section .cards-frame {
+  margin-top: 56px;
+  height: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-bottom: 66px;
+}
+.homePage .active-users-frame .active-users-section .cards-frame .card {
+  min-height: 273px;
+  min-width: 305px;
+  margin: 0 14px;
+}
+.homePage
+  .active-users-frame
+  .active-users-section
+  .cards-frame
+  .card
+  .user-image {
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+}
+.homePage
+  .active-users-frame
+  .active-users-section
+  .cards-frame
+  .card
+  .card-details {
+  margin-top: -14px;
+  padding: 10px 0;
+  background-color: #f8f8ff;
+  align-items: center;
+}
+.homePage
+  .active-users-frame
+  .active-users-section
+  .cards-frame
+  .card
+  .card-details
+  .title {
+  font-size: 14px;
+  font-weight: 550;
+}
+.homePage .active-users-frame .active-users-section .category-title {
+  color: rgb(52, 52, 52);
+  font-family: "Roboto", serif;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 42px;
+}
