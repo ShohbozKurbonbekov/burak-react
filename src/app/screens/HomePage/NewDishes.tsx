@@ -12,7 +12,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 // import VisibilityIcon from "@mui/icons-material/Visibility";
 // import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
-const newDishes = [
+let newDishes = [
   {
     productName: "Cutlet",
     imagePath: "/img/cutlet.webp",
@@ -31,6 +31,8 @@ const newDishes = [
   },
 ];
 
+newDishes = [];
+
 export default function NewDishes() {
   return (
     <div className="new-dishes-frame">
@@ -39,37 +41,41 @@ export default function NewDishes() {
           <Box className="category-title">Fresh Menu</Box>
           <Stack className="cards-frame">
             <CssVarsProvider>
-              {newDishes.map((product, number) => {
-                return (
-                  <Card className="card" key={number} variant="outlined">
-                    <CardOverflow>
-                      <div className="product-sale">Normal Size</div>
-                      <AspectRatio ratio="1">
-                        <img src={product.imagePath} alt="" />
-                      </AspectRatio>
-                    </CardOverflow>
-                    <CardOverflow variant="soft" className="card-details">
-                      <Stack className="info">
-                        <Stack flexDirection={"row"}>
-                          <Typography className="title">
-                            {product.productName}
-                          </Typography>
-                          <Divider height="24" width="2" bg="#d9d9d9" />
-                          <Typography className="price">$12</Typography>
+              {newDishes.length !== 0 ? (
+                newDishes.map((product, number) => {
+                  return (
+                    <Card className="card" key={number} variant="outlined">
+                      <CardOverflow>
+                        <div className="product-sale">Normal Size</div>
+                        <AspectRatio ratio="1">
+                          <img src={product.imagePath} alt="" />
+                        </AspectRatio>
+                      </CardOverflow>
+                      <CardOverflow variant="soft" className="card-details">
+                        <Stack className="info">
+                          <Stack flexDirection={"row"}>
+                            <Typography className="title">
+                              {product.productName}
+                            </Typography>
+                            <Divider height="24" width="2" bg="#d9d9d9" />
+                            <Typography className="price">$12</Typography>
+                          </Stack>
+                          <Stack>
+                            <Typography className="views">
+                              20
+                              <VisibilityIcon
+                                sx={{ fontSize: "25", marginLeft: "5px" }}
+                              ></VisibilityIcon>
+                            </Typography>
+                          </Stack>
                         </Stack>
-                        <Stack>
-                          <Typography className="views">
-                            20
-                            <VisibilityIcon
-                              sx={{ fontSize: "25", marginLeft: "5px" }}
-                            ></VisibilityIcon>
-                          </Typography>
-                        </Stack>
-                      </Stack>
-                    </CardOverflow>
-                  </Card>
-                );
-              })}
+                      </CardOverflow>
+                    </Card>
+                  );
+                })
+              ) : (
+                <Box className="no-data">New Products are not available</Box>
+              )}
             </CssVarsProvider>
           </Stack>
         </Stack>
