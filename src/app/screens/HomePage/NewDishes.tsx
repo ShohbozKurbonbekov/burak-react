@@ -31,8 +31,6 @@ let newDishes = [
   },
 ];
 
-newDishes = [];
-
 export default function NewDishes() {
   return (
     <div className="new-dishes-frame">

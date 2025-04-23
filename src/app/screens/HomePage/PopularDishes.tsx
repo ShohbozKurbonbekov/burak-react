@@ -24,7 +24,6 @@ let list = [
     imagePath: "/img/kebab-fresh.webp",
   },
 ];
-list = [];
 
 export default function PopularDishes() {
   return (
