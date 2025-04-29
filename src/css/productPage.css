@@ -1,0 +1,114 @@
+.products-page {
+  font-family: Roboto, serif;
+}
+.products-page .products .searchBar-container {
+  margin: 77px 0 64px 0;
+  display: flex;
+}
+
+.products-page .products .searchBar-container .searchBar {
+  flex: 1 1 auto;
+  min-width: 360px;
+  background-color: rgb(255, 252, 252);
+  margin-left: 126px;
+  border-top-left-radius: 70px;
+  border-bottom-left-radius: 70px;
+  box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.1);
+}
+.products-page .products .searchBar-container .searchBar input {
+  border-top-left-radius: 70px;
+  border-bottom-left-radius: 70px;
+  color: rgb(74, 74, 74);
+  font-family: Quicksand;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 19px;
+  border: none;
+  outline: none;
+  padding: 0.8rem 1.4rem;
+}
+.products-page .products .searchBar-container .searchBar-btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.products-page .products .searchBar-container .searchBar-title {
+  flex: 2 1 auto;
+  text-align: end;
+  color: rgb(52, 52, 52);
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 42px;
+}
+
+.products-page .products .buttons-group button {
+  width: 70px;
+  color: rgb(52, 52, 52);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.products-page .products .products-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+.products-page .products .products-container .products-buttons {
+  padding-top: 70px;
+  width: 70px;
+}
+
+.products-page .products .products-container .products-wrapper {
+  width: 100%;
+  height: auto;
+}
+
+.products-page .products .products-container .products-wrapper .custom-card {
+  position: relative;
+  border-top-right-radius: 50px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+.products-page
+  .products
+  .products-container
+  .products-wrapper
+  .custom-card
+  .MuiAspectRatio-root {
+  border-radius: 0;
+}
+.products-page
+  .products
+  .products-container
+  .products-wrapper
+  .custom-card
+  .product-size {
+  position: absolute;
+  z-index: 30;
+  padding: 0.5rem 1rem;
+  background-color: #ff9200;
+  border-radius: 15px;
+  top: 10px;
+  left: 10px;
+  color: #fff;
+  color: rgb(255, 255, 255);
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+/*FAMILY BRAND*/
+.products .family-brand-section {
+  background-color: #0d1518;
+  padding: 84px 0;
+}
+.products .products-map {
+  padding: 80px 0 60px 0;
+  width: 100%;
+  height: auto;
+}

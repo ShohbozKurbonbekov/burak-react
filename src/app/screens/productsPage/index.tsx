@@ -1,6 +1,7 @@
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import ChosenProduct from "./ChosenProduct";
 import Products from "./Products";
+import "../../../css/productPage.css";
 
 export default function ProductPage() {
   const products = useRouteMatch();
