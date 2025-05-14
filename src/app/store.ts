@@ -6,6 +6,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     // @ts-ignore
     getDefaultMiddleware().concat(reduxLogger),
+
   reducer: {
     homePage: HomePageReducer,
   },
