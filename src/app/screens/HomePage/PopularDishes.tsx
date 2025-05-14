@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { retrievePopularDishes } from "./selector";
 import { Product } from "../../../lib/types/product";
-import ProductService from "../../services/ProductService";
 import { serverApi } from "../../../lib/config";
 
 const popularDishesRetriever = createSelector(

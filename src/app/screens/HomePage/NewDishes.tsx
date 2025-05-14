@@ -12,11 +12,10 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import { retrieveNewDishes, retrievePopularDishes } from "./selector";
 import { Product } from "../../../lib/types/product";
-import ProductService from "../../services/ProductService";
 import { serverApi } from "../../../lib/config";
 import { ProductCollection } from "../../../lib/enums/product.enum";
+import { retrieveNewDishes } from "./selector";
 
 // REDUX SLICE & SELECTOR
 
