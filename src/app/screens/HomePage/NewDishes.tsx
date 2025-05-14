@@ -9,29 +9,24 @@ import {
 } from "@mui/joy";
 import Divider from "../../components/divider/index";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-// import VisibilityIcon from "@mui/icons-material/Visibility";
-// import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
-let newDishes = [
-  {
-    productName: "Cutlet",
-    imagePath: "/img/cutlet.webp",
-  },
-  {
-    productName: "Kebab",
-    imagePath: "/img/kebab-fresh.webp",
-  },
-  {
-    productName: "Kebab",
-    imagePath: "/img/kebab.webp",
-  },
-  {
-    productName: "Lavash",
-    imagePath: "/img/lavash.webp",
-  },
-];
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
+import { retrieveNewDishes, retrievePopularDishes } from "./selector";
+import { Product } from "../../../lib/types/product";
+import ProductService from "../../services/ProductService";
+import { serverApi } from "../../../lib/config";
+import { ProductCollection } from "../../../lib/enums/product.enum";
+
+// REDUX SLICE & SELECTOR
+
+const newDishesRetriever = createSelector(retrieveNewDishes, (newDishes) => ({
+  newDishes,
+}));
 
 export default function NewDishes() {
+  const { newDishes } = useSelector(newDishesRetriever);
+  console.log("new Dishes", newDishes);
   return (
     <div className="new-dishes-frame">
       <Container>
@@ -40,13 +35,18 @@ export default function NewDishes() {
           <Stack className="cards-frame">
             <CssVarsProvider>
               {newDishes.length !== 0 ? (
-                newDishes.map((product, number) => {
+                newDishes.map((product: Product) => {
+                  const imagePath = `${serverApi}/${product.productImages[0]}`;
+                  const sizeVolume =
+                    product.productCollection === ProductCollection.DRINK
+                      ? product.productValue + "l"
+                      : product.productSize + " size";
                   return (
-                    <Card className="card" key={number} variant="outlined">
+                    <Card className="card" key={product._id} variant="outlined">
                       <CardOverflow>
-                        <div className="product-sale">Normal Size</div>
+                        <div className="product-sale">{sizeVolume}</div>
                         <AspectRatio ratio="1">
-                          <img src={product.imagePath} alt="" />
+                          <img src={imagePath} alt="" />
                         </AspectRatio>
                       </CardOverflow>
                       <CardOverflow variant="soft" className="card-details">
@@ -56,11 +56,13 @@ export default function NewDishes() {
                               {product.productName}
                             </Typography>
                             <Divider height="24" width="2" bg="#d9d9d9" />
-                            <Typography className="price">$12</Typography>
+                            <Typography className="price">
+                              {product.productPrice}
+                            </Typography>
                           </Stack>
                           <Stack>
                             <Typography className="views">
-                              20
+                              {product.productViews}
                               <VisibilityIcon
                                 sx={{ fontSize: "25", marginLeft: "5px" }}
                               ></VisibilityIcon>
