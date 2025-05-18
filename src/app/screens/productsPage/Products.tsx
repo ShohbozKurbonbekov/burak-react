@@ -1,4 +1,5 @@
 import * as React from "react";
+import ProductService from "../../services/ProductService";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
 
@@ -22,20 +23,11 @@ import { showProductsButtons } from "../../../js/product-page";
 import { Dispatch } from "@reduxjs/toolkit";
 import { setProducts } from "./slice";
 import { Product } from "../../../lib/types/product";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { retrieveProducts } from "./selector";
-
-const products = [
-  { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab.webp" },
-  { productName: "Lavash", imagePath: "/img/lavash.webp" },
-  { productName: "Lavash", imagePath: "/img/lavash.webp" },
-  { productName: "Cutlet", imagePath: "/img/cutlet.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab.webp" },
-  { productName: "Lavash", imagePath: "/img/lavash.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
-];
+import { ProductCollection } from "../../../lib/enums/product.enum";
+import { serverApi } from "../../../lib/config";
 
 const brandPictures = [
   { brandPath: "/brand-images/brand1.png" },
@@ -43,7 +35,6 @@ const brandPictures = [
   { brandPath: "/brand-images/brand3.png" },
   { brandPath: "/brand-images/brand4.png" },
 ];
-
 const actionDispatch = (dispatch: Dispatch) => ({
   setProducts: (data: Product[]) => dispatch(setProducts(data)),
 });
@@ -54,9 +45,27 @@ const productsRetriever = createSelector(retrieveProducts, (products) => ({
 
 export default function Products() {
   const { setProducts } = actionDispatch(useDispatch());
+  const { products } = useSelector(productsRetriever);
 
   useEffect(() => {
     showProductsButtons();
+
+    const product = new ProductService();
+    product
+      .getProducts({
+        page: 1,
+        order: "createdAt",
+        limit: 8,
+        productCollection: ProductCollection.DISH,
+        search: "",
+      })
+      .then((data) => {
+        console.log(data);
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
@@ -184,10 +193,15 @@ export default function Products() {
           >
             <CssVarsProvider>
               {products.length !== 0 ? (
-                products.map((product, number) => {
+                products.map((product: Product) => {
+                  const imagePath = `${serverApi}/${product.productImages[0]}`;
+                  const sizeVolume =
+                    product.productCollection === ProductCollection.DRINK
+                      ? product.productValue + " liter"
+                      : product.productSize + " size";
                   return (
                     <Card
-                      key={number}
+                      key={product._id}
                       className="custom-card"
                       variant="plain"
                       sx={{
@@ -198,14 +212,14 @@ export default function Products() {
                     >
                       <Box sx={{ position: "relative" }}>
                         <Typography className="product-size">
-                          LARGE size
+                          {sizeVolume}
                         </Typography>
                         <AspectRatio ratio="1">
                           <figure>
                             <img
                               src="https://images.unsplash.com/photo-1515825838458-f2a94b20105a?auto=format&fit=crop&w=300"
                               className="card-image"
-                              srcSet={product.imagePath}
+                              srcSet={imagePath}
                               loading="lazy"
                               alt={product.productName}
                             />
@@ -256,7 +270,7 @@ export default function Products() {
                                 }}
                               >
                                 <Badge
-                                  badgeContent={4}
+                                  badgeContent={product.productViews}
                                   size="sm"
                                   sx={{
                                     "& .MuiBadge-badge": {
@@ -270,7 +284,15 @@ export default function Products() {
                                     },
                                   }}
                                 >
-                                  <VisibilityIcon sx={{ fontSize: "25px" }} />
+                                  <VisibilityIcon
+                                    sx={{
+                                      fontSize: "25px",
+                                      color:
+                                        product.productViews === 0
+                                          ? "gray"
+                                          : "white",
+                                    }}
+                                  />
                                 </Badge>
                               </Stack>
                             </Box>
@@ -312,7 +334,7 @@ export default function Products() {
                                 color: "#EEA61E",
                               }}
                             />
-                            14
+                            {product.productPrice}
                           </Typography>
                         </Box>
                       </Stack>
