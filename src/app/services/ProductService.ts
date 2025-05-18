@@ -1,7 +1,6 @@
 import axios from "axios";
 import { serverApi } from "../../lib/config";
 import { Product, ProductInquery } from "../../lib/types/product";
-import axois from "axios";
 
 class ProductService {
   private readonly path;
@@ -23,7 +22,6 @@ class ProductService {
       }
 
       const result = await axios.get(url);
-      console.log("getProducts: ", result);
 
       return result.data;
     } catch (error) {

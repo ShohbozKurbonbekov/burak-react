@@ -17,8 +17,14 @@ import { useEffect } from "react";
 import { Button, Container, Stack } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import MonetizationOnSharpIcon from "@mui/icons-material/MonetizationOnSharp";
-import { Badge, CardContent, CssVarsProvider } from "@mui/joy";
+import { Badge, CssVarsProvider } from "@mui/joy";
 import { showProductsButtons } from "../../../js/product-page";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setProducts } from "./slice";
+import { Product } from "../../../lib/types/product";
+import { useDispatch } from "react-redux";
+import { createSelector } from "reselect";
+import { retrieveProducts } from "./selector";
 
 const products = [
   { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
@@ -38,7 +44,17 @@ const brandPictures = [
   { brandPath: "/brand-images/brand4.png" },
 ];
 
+const actionDispatch = (dispatch: Dispatch) => ({
+  setProducts: (data: Product[]) => dispatch(setProducts(data)),
+});
+
+const productsRetriever = createSelector(retrieveProducts, (products) => ({
+  products,
+}));
+
 export default function Products() {
+  const { setProducts } = actionDispatch(useDispatch());
+
   useEffect(() => {
     showProductsButtons();
   }, []);
