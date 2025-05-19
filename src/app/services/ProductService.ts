@@ -14,7 +14,7 @@ class ProductService {
       let url = `${this.path}/product/all?order=${input.order}&page=${input.page}&limit=${input.limit}`;
 
       if (input.productCollection) {
-        url += `&productionCollection=${input.productCollection}`;
+        url += `&productCollection=${input.productCollection}`;
       }
 
       if (input.search) {
