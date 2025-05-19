@@ -29,6 +29,18 @@ class ProductService {
       throw error;
     }
   }
+
+  public async getProduct(id: string): Promise<Product> {
+    try {
+      const url = `${this.path}/product/${id}`;
+      const result = await axios.get(url);
+
+      return result.data;
+    } catch (error) {
+      console.log("Error, getProduct: ", error);
+      throw error;
+    }
+  }
 }
 
 export default ProductService;
