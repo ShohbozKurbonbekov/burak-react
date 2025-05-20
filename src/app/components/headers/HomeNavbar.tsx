@@ -2,8 +2,13 @@ import { Box, Button, Container, Stack } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
 import { useEffect, useState } from "react";
+import { CartItem } from "../../../lib/types/search";
 
-export default function HomeNavbar() {
+interface HomeNavbarProps {
+  cartItems: CartItem[];
+}
+export default function HomeNavbar(props: HomeNavbarProps) {
+  const { cartItems } = props;
   const [count, setCount] = useState<number>(0);
   const [value, setValue] = useState<boolean>(false);
 
@@ -99,7 +104,7 @@ return () => {...} => Cleanup function, runs before unmount or re-run of effect
                 Help
               </NavLink>
             </Box>
-            <Basket />
+            <Basket cartItems={cartItems} />
             {!authMember ? (
               <Box>
                 <Button variant="contained" className="login-button">

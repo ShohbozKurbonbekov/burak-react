@@ -30,6 +30,7 @@ import { retrieveProducts } from "./selector";
 import { ProductCollection } from "../../../lib/enums/product.enum";
 import { serverApi } from "../../../lib/config";
 import { useHistory } from "react-router-dom";
+import { CartItem } from "../../../lib/types/search";
 
 const brandPictures = [
   { brandPath: "/brand-images/brand1.png" },
@@ -45,7 +46,10 @@ const productsRetriever = createSelector(retrieveProducts, (products) => ({
   products,
 }));
 
-export default function Products() {
+interface ProductsProps {
+  onAdd: (item: CartItem) => void;
+}
+export default function Products(props: ProductsProps) {
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
   const [productSearch, setProductSearch] = useState<ProductInquery>({
@@ -56,6 +60,7 @@ export default function Products() {
     search: "",
   });
   const [searchInput, setSearchInput] = useState<string>("");
+  const { onAdd } = props;
 
   const history = useHistory();
 
@@ -365,6 +370,17 @@ export default function Products() {
                               }}
                             >
                               <IconButton
+                                onClick={(e) => {
+                                  e.stopPropagation();
+
+                                  onAdd({
+                                    _id: product._id,
+                                    quantity: 1,
+                                    name: product.productName,
+                                    price: product.productPrice,
+                                    image: product.productImages[0],
+                                  });
+                                }}
                                 size="md"
                                 variant="solid"
                                 sx={{
