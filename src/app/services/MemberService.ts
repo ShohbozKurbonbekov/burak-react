@@ -59,6 +59,17 @@ class MemberService {
       throw error;
     }
   }
+  public async logout(): Promise<void> {
+    try {
+      const url = `${this.path}/member/logout`;
+      const result = await axios.post(url, {}, { withCredentials: true });
+      console.log("logout result :", result);
+      localStorage.removeItem("memberData");
+    } catch (error) {
+      console.log("Error: in logout: ", error);
+      throw error;
+    }
+  }
 }
 
 export default MemberService;
