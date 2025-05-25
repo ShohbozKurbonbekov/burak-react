@@ -12,6 +12,10 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import "../../../css/order.css";
 import TextField from "@mui/material/TextField";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setFinishedOrder, setPausedOrders, setProcessOrders } from "./slice";
+import { Order } from "../../../lib/types/order";
+import { useDispatch } from "react-redux";
 
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
   width: 22,
@@ -19,7 +23,17 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
   border: `2px solid ${theme.palette.background.paper}`,
 }));
 
+// REDUX SETUP - SLICE AND SELECTOR
+const actionDispatch = (dispatch: Dispatch) => ({
+  setPausedOrders: (data: Order[]) => dispatch(setPausedOrders(data)),
+  setProcessOrders: (data: Order[]) => dispatch(setProcessOrders(data)),
+  setFinishedOrder: (data: Order[]) => dispatch(setFinishedOrder(data)),
+});
+
 export default function OrdersPage() {
+  const { setPausedOrders, setProcessOrders, setFinishedOrder } =
+    actionDispatch(useDispatch());
+
   const [newValue, setValue] = useState("1");
   const [card, setCard] = React.useState("Card number : 5243 4090 2002 7495");
   const [year, setYear] = React.useState("7 /24");
