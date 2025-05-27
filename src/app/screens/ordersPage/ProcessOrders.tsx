@@ -1,15 +1,29 @@
 import { TabPanel } from "@mui/lab";
 import { Box, Button, Stack, Typography } from "@mui/material";
+import { createSelector } from "@reduxjs/toolkit";
 import moment from "moment";
+import { retrieveProcessOrder } from "./selector";
+import { useSelector } from "react-redux";
+import { OrderItem } from "../../../lib/types/order";
+import { Product } from "../../../lib/types/product";
+import { serverApi } from "../../../lib/config";
+
+const processOrderRetriever = createSelector(
+  retrieveProcessOrder,
+  (processOrders) => ({ processOrders })
+);
 
 export default function ProcessOrders() {
+  const { processOrders } = useSelector(processOrderRetriever);
+
+  console.log("Process orders", processOrders);
   return (
     <TabPanel value={"2"}>
       <Stack>
-        {[1, 2].map((el, index) => {
+        {processOrders.map((order) => {
           return (
             <Box
-              key={index}
+              key={order._id}
               className="order-main-box"
               sx={{
                 p: 3,
@@ -20,10 +34,14 @@ export default function ProcessOrders() {
               }}
             >
               <Box sx={{ mb: 2 }}>
-                {[1, 2, 3].map((_, index2) => {
+                {order?.orderItems?.map((item: OrderItem) => {
+                  const product = order.productData.filter(
+                    (el: Product) => item.productId === el._id
+                  )[0];
+                  const imagePath = `${serverApi}/${product.productImages[0]}`;
                   return (
                     <Box
-                      key={index2}
+                      key={item._id}
                       display={"flex"}
                       className="orders-name-price"
                       flexDirection={"row"}
@@ -36,7 +54,7 @@ export default function ProcessOrders() {
                         alignItems={"center"}
                       >
                         <img
-                          src="/img/lavash.webp"
+                          src={imagePath}
                           alt=""
                           className="order-dish-img"
                           style={{
@@ -54,7 +72,7 @@ export default function ProcessOrders() {
                             fontFamily: "Poppins",
                           }}
                         >
-                          Lavash
+                          {product.productName}
                         </p>
                       </Box>
                       <Box
@@ -69,11 +87,11 @@ export default function ProcessOrders() {
                           fontSize: "14px",
                         }}
                       >
-                        <p>$9</p>
+                        <p>${item.itemPrice}</p>
                         <img src="/icons/close.svg" alt="" />
-                        <span>2</span>
+                        <span>{item.itemQuantity}</span>
                         <img src="/icons/pause.svg" alt="" />
-                        <p>$24</p>
+                        <p>${item.itemPrice * item.itemQuantity}</p>
                       </Box>
                     </Box>
                   );
@@ -100,21 +118,21 @@ export default function ProcessOrders() {
                     Product price
                   </Typography>
                   <Typography component={"p"} sx={{ fontWeight: "bold" }}>
-                    $60
+                    ${order.orderTotal - order.orderDelivery}
                   </Typography>
                   <img src="/icons/plus.svg" alt="" />
                   <Typography component={"h4"} sx={{ fontWeight: "bold" }}>
                     Delivery cost
                   </Typography>
                   <Typography component={"p"} sx={{ fontWeight: "bold" }}>
-                    $5
+                    ${order.orderDelivery}
                   </Typography>
                   <img src="/icons/pause.svg" alt="" />
                   <Typography component={"h4"} sx={{ fontWeight: "bold" }}>
                     Total
                   </Typography>
                   <Typography component={"p"} sx={{ fontWeight: "bold" }}>
-                    $20
+                    ${order.orderTotal}
                   </Typography>
                 </Box>
                 <Box display={"flex"} gap={"10px"} alignItems={"center"}>
@@ -139,15 +157,20 @@ export default function ProcessOrders() {
           );
         })}
 
-        {false && (
-          <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
-            <img
-              src="/icons/noimage-list.svg"
-              alt=""
-              style={{ width: 300, height: 300 }}
-            />
-          </Box>
-        )}
+        {!processOrders ||
+          (processOrders.length === 0 && (
+            <Box
+              display={"flex"}
+              flexDirection={"row"}
+              justifyContent={"center"}
+            >
+              <img
+                src="/icons/noimage-list.svg"
+                alt=""
+                style={{ width: 300, height: 300 }}
+              />
+            </Box>
+          ))}
       </Stack>
     </TabPanel>
   );

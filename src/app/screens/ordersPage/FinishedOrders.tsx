@@ -1,14 +1,28 @@
 import { TabPanel } from "@mui/lab";
 import { Box, Button, Stack, Typography } from "@mui/material";
+import { createSelector } from "@reduxjs/toolkit";
+import { retrieveFinishedOrders } from "./selector";
+import { useSelector } from "react-redux";
+import { Product } from "../../../lib/types/product";
+import { serverApi } from "../../../lib/config";
+import { OrderItem } from "../../../lib/types/order";
+
+const finishedOrdersRetriever = createSelector(
+  retrieveFinishedOrders,
+  (finishedOrders) => ({ finishedOrders })
+);
 
 export default function FinishedOrders() {
+  const { finishedOrders } = useSelector(finishedOrdersRetriever);
+  console.log("finishedOrders", finishedOrders);
+
   return (
     <TabPanel value={"3"}>
       <Stack>
-        {[1, 2, 3].map((el, index) => {
+        {finishedOrders.map((order) => {
           return (
             <Box
-              key={index}
+              key={order._id}
               className="order-main-box"
               sx={{
                 p: 3,
@@ -19,10 +33,15 @@ export default function FinishedOrders() {
               }}
             >
               <Box sx={{ mb: 2 }}>
-                {[1, 2, 3].map((_, index2) => {
+                {order?.orderItems?.map((item: OrderItem) => {
+                  const product = order.productData.filter(
+                    (product: Product) => product._id === item.productId
+                  )[0];
+
+                  const imagePath = `${serverApi}/${product.productImages[0]}`;
                   return (
                     <Box
-                      key={index2}
+                      key={item._id}
                       display={"flex"}
                       className="orders-name-price"
                       flexDirection={"row"}
@@ -35,8 +54,8 @@ export default function FinishedOrders() {
                         alignItems={"center"}
                       >
                         <img
-                          src="/img/lavash.webp"
-                          alt=""
+                          src={imagePath}
+                          alt={product.productName}
                           className="order-dish-img"
                           style={{
                             width: "40px",
@@ -53,7 +72,7 @@ export default function FinishedOrders() {
                             fontFamily: "Poppins",
                           }}
                         >
-                          Lavash
+                          {product.productName}
                         </p>
                       </Box>
                       <Box
@@ -68,11 +87,13 @@ export default function FinishedOrders() {
                           fontSize: "14px",
                         }}
                       >
-                        <p>$9</p>
+                        <p>${item.itemPrice}</p>
                         <img src="/icons/close.svg" alt="" />
-                        <span>2</span>
+                        <span>{item.itemQuantity}</span>
                         <img src="/icons/pause.svg" alt="" />
-                        <p>$24</p>
+                        <p>
+                          ${item.itemPrice} * {item.itemQuantity}
+                        </p>
                       </Box>
                     </Box>
                   );
@@ -99,21 +120,21 @@ export default function FinishedOrders() {
                     Product price
                   </Typography>
                   <Typography component={"p"} sx={{ fontWeight: "bold" }}>
-                    $60
+                    ${order.orderTotal} - {order.orderDelivery}
                   </Typography>
                   <img src="/icons/plus.svg" alt="" />
                   <Typography component={"h4"} sx={{ fontWeight: "bold" }}>
                     Delivery cost
                   </Typography>
                   <Typography component={"p"} sx={{ fontWeight: "bold" }}>
-                    $5
+                    ${order.orderDelivery}
                   </Typography>
                   <img src="/icons/pause.svg" alt="" />
                   <Typography component={"h4"} sx={{ fontWeight: "bold" }}>
                     Total
                   </Typography>
                   <Typography component={"p"} sx={{ fontWeight: "bold" }}>
-                    $20
+                    ${order.orderTotal}
                   </Typography>
                 </Box>
               </Box>
@@ -121,15 +142,20 @@ export default function FinishedOrders() {
           );
         })}
 
-        {false && (
-          <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
-            <img
-              src="/icons/noimage-list.svg"
-              alt=""
-              style={{ width: 300, height: 300 }}
-            />
-          </Box>
-        )}
+        {!finishedOrders ||
+          (finishedOrders.length === 0 && (
+            <Box
+              display={"flex"}
+              flexDirection={"row"}
+              justifyContent={"center"}
+            >
+              <img
+                src="/icons/noimage-list.svg"
+                alt=""
+                style={{ width: 300, height: 300 }}
+              />
+            </Box>
+          ))}
       </Stack>
     </TabPanel>
   );
