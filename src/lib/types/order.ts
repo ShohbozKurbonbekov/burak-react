@@ -32,7 +32,7 @@ export interface OrderItem {
   updatedAt: Date;
 }
 
-export interface orderInquery {
+export interface OrderInquery {
   page: number;
   limit: number;
   orderStatus: OrderStatus;

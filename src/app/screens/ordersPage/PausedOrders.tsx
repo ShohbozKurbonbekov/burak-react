@@ -1,14 +1,26 @@
 import { TabPanel } from "@mui/lab";
 import { Box, Button, Stack, Typography } from "@mui/material";
+import { createSelector } from "@reduxjs/toolkit";
+import { retrievePausedOrders } from "./selector";
+import { useSelector } from "react-redux";
+import { Order, OrderItem } from "../../../lib/types/order";
+import { serverApi } from "../../../lib/config";
+import { Product } from "../../../lib/types/product";
 
+const pausedOrdersRetriever = createSelector(
+  retrievePausedOrders,
+  (pausedOrders) => ({ pausedOrders })
+);
 export default function PuasedOrders() {
+  const { pausedOrders } = useSelector(pausedOrdersRetriever);
+
   return (
     <TabPanel value={"1"}>
       <Stack>
-        {[1].map((el, index) => {
+        {pausedOrders?.map((order: Order) => {
           return (
             <Box
-              key={index}
+              key={order._id}
               className="order-main-box"
               sx={{
                 p: 3,
@@ -19,10 +31,16 @@ export default function PuasedOrders() {
               }}
             >
               <Box sx={{ mb: 2 }}>
-                {[1, 2, 3].map((_, index2) => {
+                {order?.orderItems?.map((item: OrderItem) => {
+                  const product: Product = order.productData.filter(
+                    (el: Product) => item.productId === el._id
+                  )[0];
+
+                  const imagePath = `${serverApi}/${product.productImages[0]}`;
+
                   return (
                     <Box
-                      key={index2}
+                      key={item._id}
                       display={"flex"}
                       className="orders-name-price"
                       flexDirection={"row"}
@@ -35,7 +53,7 @@ export default function PuasedOrders() {
                         alignItems={"center"}
                       >
                         <img
-                          src="/img/lavash.webp"
+                          src={imagePath}
                           alt=""
                           className="order-dish-img"
                           style={{
@@ -53,7 +71,7 @@ export default function PuasedOrders() {
                             fontFamily: "Poppins",
                           }}
                         >
-                          Lavash
+                          {product.productName}
                         </p>
                       </Box>
                       <Box
@@ -68,11 +86,11 @@ export default function PuasedOrders() {
                           fontSize: "14px",
                         }}
                       >
-                        <p>$9</p>
-                        <img src="/icons/close.svg" alt="" />
-                        <span>2</span>
+                        <p>${item.itemPrice}</p>
+                        <img src="/icons/close.svg" alt="closing-icon" />
+                        <span>{item.itemQuantity}</span>
                         <img src="/icons/pause.svg" alt="" />
-                        <p>$24</p>
+                        <p>${item.itemQuantity * item.itemPrice}</p>
                       </Box>
                     </Box>
                   );
@@ -99,21 +117,21 @@ export default function PuasedOrders() {
                     Product price
                   </Typography>
                   <Typography component={"p"} sx={{ fontWeight: "bold" }}>
-                    $60
+                    ${order.orderTotal - order.orderDelivery}
                   </Typography>
                   <img src="/icons/plus.svg" alt="" />
                   <Typography component={"h4"} sx={{ fontWeight: "bold" }}>
                     Delivery cost
                   </Typography>
                   <Typography component={"p"} sx={{ fontWeight: "bold" }}>
-                    $5
+                    ${order.orderDelivery}
                   </Typography>
                   <img src="/icons/pause.svg" alt="" />
                   <Typography component={"h4"} sx={{ fontWeight: "bold" }}>
                     Total
                   </Typography>
                   <Typography component={"p"} sx={{ fontWeight: "bold" }}>
-                    $20
+                    ${order.orderTotal}
                   </Typography>
                 </Box>
                 <Box display={"flex"} gap={"10px"}>
@@ -139,15 +157,20 @@ export default function PuasedOrders() {
           );
         })}
 
-        {false && (
-          <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
-            <img
-              src="/icons/noimage-list.svg"
-              alt=""
-              style={{ width: 300, height: 300 }}
-            />
-          </Box>
-        )}
+        {!pausedOrders ||
+          (pausedOrders.length === 0 && (
+            <Box
+              display={"flex"}
+              flexDirection={"row"}
+              justifyContent={"center"}
+            >
+              <img
+                src="/icons/noimage-list.svg"
+                alt=""
+                style={{ width: 300, height: 300 }}
+              />
+            </Box>
+          ))}
       </Stack>
     </TabPanel>
   );
