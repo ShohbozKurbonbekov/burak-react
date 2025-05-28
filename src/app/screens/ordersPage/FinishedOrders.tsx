@@ -1,5 +1,5 @@
 import { TabPanel } from "@mui/lab";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { createSelector } from "@reduxjs/toolkit";
 import { retrieveFinishedOrders } from "./selector";
 import { useSelector } from "react-redux";

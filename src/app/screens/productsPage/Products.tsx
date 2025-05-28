@@ -31,6 +31,7 @@ import { ProductCollection } from "../../../lib/enums/product.enum";
 import { serverApi } from "../../../lib/config";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
+import "../../../css/productPage.css";
 
 const brandPictures = [
   { brandPath: "/brand-images/brand1.png" },
@@ -52,6 +53,7 @@ interface ProductsProps {
 export default function Products(props: ProductsProps) {
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
+
   const [productSearch, setProductSearch] = useState<ProductInquery>({
     page: 1,
     order: "createdAt",
@@ -475,7 +477,15 @@ export default function Products(props: ProductsProps) {
                   );
                 })
               ) : (
-                <Box className="no-data">New Products are not available</Box>
+                <Box
+                  className="no-data"
+                  sx={{
+                    width: "100%",
+                    height: "300px",
+                  }}
+                >
+                  New Products are not available
+                </Box>
               )}
             </CssVarsProvider>
           </Stack>

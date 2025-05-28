@@ -18,6 +18,7 @@ import { Order, OrderInquery } from "../../../lib/types/order";
 import { useDispatch } from "react-redux";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import OrderService from "../../services/OrderService";
+import { useGlobals } from "../../hooks/useGlobals";
 
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
   width: 22,
@@ -47,6 +48,7 @@ export default function OrdersPage() {
     orderStatus: OrderStatus.PAUSE,
   });
 
+  const { orderBuilder } = useGlobals();
   useEffect(() => {
     const order = new OrderService();
 
@@ -70,7 +72,7 @@ export default function OrdersPage() {
       .catch((error) => {
         console.log(error);
       });
-  }, [orderInquery]);
+  }, [orderInquery, orderBuilder]);
   // HANDLERS
   const handleChange = (e: SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -110,8 +112,8 @@ export default function OrdersPage() {
               </Box>
             </Box>
             <Stack className="order-main-content">
-              <PausedOrders />
-              <ProcessOrders />
+              <PausedOrders setValue={setValue} />
+              <ProcessOrders setValue={setValue} />
               <FinishedOrders />
             </Stack>
           </TabContext>
