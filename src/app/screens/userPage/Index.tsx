@@ -10,6 +10,18 @@ import {
 import { styled } from "@mui/material/styles";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import TextField from "@mui/material/TextField";
+import { useGlobals } from "../../hooks/useGlobals";
+import { useHistory } from "react-router-dom";
+import { MemberType } from "../../../lib/enums/member.enum";
+import { Messages, serverApi } from "../../../lib/config";
+import { MemberUpdateInput } from "../../../lib/types/member";
+import { useState } from "react";
+import { T } from "../../../lib/types/common";
+import {
+  sweetErrorHandling,
+  sweetTopSmallSuccessAlert,
+} from "../../../lib/sweetAlert";
+import MemberService from "../../services/MemberService";
 
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
   width: 22,
@@ -18,6 +30,86 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 export default function UserPage() {
+  const { authMember, setAuthMember } = useGlobals();
+  const [memberUpdateInput, setMemberUpdateInput] = useState<MemberUpdateInput>(
+    {
+      memberNick: authMember?.memberNick,
+      memberPhone: authMember?.memberPhone,
+      memberAddress: authMember?.memberAddress,
+      memberDescription: authMember?.memberDescription,
+      memberImage: authMember?.memberImage,
+    }
+  );
+
+  const [memberImage, setMemberImage] = useState<string>(
+    authMember?.memberImage
+      ? `${serverApi}/${authMember.memberImage}`
+      : "/icons/default-user.svg"
+  );
+  const history = useHistory();
+  if (!authMember) history.push("/");
+
+  // HANDLERS
+  const memberNickHandler = (e: T) => {
+    memberUpdateInput.memberNick = e.target.value;
+    setMemberUpdateInput({ ...memberUpdateInput });
+  };
+  const memberPhoneHandler = (e: T) => {
+    memberUpdateInput.memberPhone = e.target.value;
+    setMemberUpdateInput({ ...memberUpdateInput });
+  };
+
+  const memberAddressHandler = (e: T) => {
+    memberUpdateInput.memberAddress = e.target.value;
+    setMemberUpdateInput({ ...memberUpdateInput });
+  };
+  const memberDescriptionHandler = (e: T) => {
+    memberUpdateInput.memberDescription = e.target.value;
+    setMemberUpdateInput({ ...memberUpdateInput });
+  };
+
+  const handleSaveButton = async () => {
+    try {
+      if (!authMember) throw new Error(Messages.error2);
+      console.log(memberUpdateInput);
+      if (
+        memberUpdateInput.memberNick === "" ||
+        memberUpdateInput.memberPhone === "" ||
+        memberUpdateInput.memberAddress === "" ||
+        memberUpdateInput.memberDescription === ""
+      ) {
+        throw new Error(Messages.error3);
+      }
+
+      const member = new MemberService();
+      const data = await member.updateMember(memberUpdateInput);
+      setAuthMember(data);
+
+      await sweetTopSmallSuccessAlert("Modified successfully!", 700);
+      console.log("data", data);
+    } catch (error) {
+      console.log(error);
+      sweetErrorHandling(error).then();
+    }
+  };
+
+  const handleImageViewer = (e: T) => {
+    const file = e.target.files[0];
+    const fileType = file.type;
+
+    const validateImageTypes = ["image/jpg", "image/jpeg", "image/png"];
+
+    if (!validateImageTypes.includes(fileType)) {
+      sweetErrorHandling(Messages.error5).then();
+    } else {
+      if (file) {
+        memberUpdateInput.memberImage = file;
+        setMemberUpdateInput({ ...memberUpdateInput });
+        setMemberImage(URL.createObjectURL(file));
+      }
+    }
+  };
+
   return (
     <div className="user-page">
       <Container
@@ -39,7 +131,7 @@ export default function UserPage() {
           >
             <Avatar
               alt="Remy Sharp"
-              src="/img/justin.webp"
+              src={memberImage}
               sx={{ width: "100px", height: "100px" }}
             />
 
@@ -69,13 +161,16 @@ export default function UserPage() {
                 JPG, JPEG, PNG format only!
               </Typography>
               <Avatar variant="rounded" sx={{ mt: "5px", cursor: "pointer" }}>
-                <CloudDownloadIcon
-                  sx={{
-                    width: "25px",
-                    height: "25px",
-                    color: "#000",
-                  }}
-                />
+                <Button component="label" onChange={handleImageViewer}>
+                  <CloudDownloadIcon
+                    sx={{
+                      width: "25px",
+                      height: "25px",
+                      color: "#000",
+                    }}
+                  />
+                  <input type="file" hidden />
+                </Button>
               </Avatar>
             </Box>
           </Box>
@@ -94,7 +189,14 @@ export default function UserPage() {
                 },
               }}
             >
-              <TextField fullWidth label="Name" id="fullWidth" />
+              <TextField
+                fullWidth
+                label="Name"
+                placeholder={authMember?.memberNick}
+                id="fullWidth"
+                value={memberUpdateInput.memberNick}
+                onChange={memberNickHandler}
+              />
             </Box>
             <Box
               display={"flex"}
@@ -115,7 +217,14 @@ export default function UserPage() {
                   },
                 }}
               >
-                <TextField fullWidth label="Phone Number" id="fullWidth" />
+                <TextField
+                  fullWidth
+                  label="Phone Number"
+                  placeholder={authMember?.memberPhone}
+                  id="fullWidth"
+                  value={memberUpdateInput.memberPhone}
+                  onChange={memberPhoneHandler}
+                />
               </Box>
               <Box
                 className="name-input"
@@ -131,7 +240,18 @@ export default function UserPage() {
                   },
                 }}
               >
-                <TextField fullWidth label="Address" id="fullWidth" />
+                <TextField
+                  fullWidth
+                  label="Address"
+                  id="fullWidth"
+                  placeholder={
+                    authMember?.memberAddress
+                      ? authMember.memberAddress
+                      : "no address"
+                  }
+                  value={memberUpdateInput.memberAddress}
+                  onChange={memberAddressHandler}
+                />
               </Box>
             </Box>
 
@@ -154,10 +274,25 @@ export default function UserPage() {
                 },
               }}
             >
-              <TextField fullWidth label="For more" id="fullWidth" />
+              <TextField
+                fullWidth
+                label="For more"
+                id="fullWidth"
+                placeholder={
+                  authMember?.memberDescription
+                    ? authMember.memberDescription
+                    : "no description"
+                }
+                value={memberUpdateInput.memberDescription}
+                onChange={memberDescriptionHandler}
+              />
             </Box>
             <Box sx={{ textAlign: "end" }}>
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveButton}
+              >
                 Save
               </Button>
             </Box>
@@ -206,11 +341,22 @@ export default function UserPage() {
                       right: "-20%",
                       border: "transparent !important",
                     }}
-                    src="	http://localhost:3000/icons/default-user.svg"
+                    src={
+                      authMember?.memberType === MemberType.RESTAURANT
+                        ? `/icons/restaurant.svg`
+                        : `/icons/user-badge.svg`
+                    }
                   />
                 }
               >
-                <Avatar alt="Justin" src="/img/justin.webp" />
+                <Avatar
+                  alt={authMember?.memberNick}
+                  src={
+                    authMember?.memberImage
+                      ? `${serverApi}/${authMember.memberImage}`
+                      : "/icons/default-user.svg"
+                  }
+                />
               </Badge>
 
               <Typography
@@ -223,7 +369,7 @@ export default function UserPage() {
                   fontWeight: "500",
                 }}
               >
-                Justin
+                {authMember?.memberNick}
               </Typography>
               <Typography
                 component="p"
@@ -234,7 +380,7 @@ export default function UserPage() {
                   fontSize: "20px",
                 }}
               >
-                USER
+                {authMember?.memberType}
               </Typography>
             </Box>
 
@@ -253,7 +399,9 @@ export default function UserPage() {
                   lineHeight: "24px",
                 }}
               >
-                South Korea, Busan
+                {authMember?.memberAddress
+                  ? `${authMember.memberAddress}`
+                  : "no address provided"}
               </Typography>
             </Box>
             <Box
@@ -264,9 +412,9 @@ export default function UserPage() {
               mt={"40px"}
               sx={{ cursor: "pointer" }}
             >
-              <img src="/icons/instagram.svg" alt="" />
-              <img src="/icons/twitter.svg" alt="" />
-              <img src="/icons/youtube.svg" alt="" />
+              <img src="/icons/instagram.svg" alt="instagram" />
+              <img src="/icons/twitter.svg" alt="twitter" />
+              <img src="/icons/youtube.svg" alt="youtube" />
             </Box>
             <Typography
               component={"p"}
@@ -280,7 +428,9 @@ export default function UserPage() {
                 mt: "10px",
               }}
             >
-              The best man
+              {authMember?.memberDescription
+                ? `${authMember.memberDescription}`
+                : "no description"}
             </Typography>
           </Box>
         </Stack>

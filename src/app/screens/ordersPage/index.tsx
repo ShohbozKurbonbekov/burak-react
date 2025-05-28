@@ -19,6 +19,9 @@ import { useDispatch } from "react-redux";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import OrderService from "../../services/OrderService";
 import { useGlobals } from "../../hooks/useGlobals";
+import { useHistory } from "react-router-dom";
+import { serverApi } from "../../../lib/config";
+import { MemberType } from "../../../lib/enums/member.enum";
 
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
   width: 22,
@@ -47,8 +50,11 @@ export default function OrdersPage() {
     limit: 5,
     orderStatus: OrderStatus.PAUSE,
   });
+  const history = useHistory();
 
-  const { orderBuilder } = useGlobals();
+  const { orderBuilder, authMember } = useGlobals();
+
+  if (!authMember) history.push("/");
   useEffect(() => {
     const order = new OrderService();
 
@@ -157,7 +163,7 @@ export default function OrdersPage() {
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 badgeContent={
                   <SmallAvatar
-                    alt="Remy Sharp"
+                    alt=""
                     sx={{
                       width: "40px !important",
                       height: "40px !important",
@@ -166,11 +172,22 @@ export default function OrdersPage() {
                       right: "-20%",
                       border: "transparent !important",
                     }}
-                    src="	http://localhost:3000/icons/default-user.svg"
+                    src={
+                      authMember?.memberType === MemberType.RESTAURANT
+                        ? `/icons/restaurant.svg`
+                        : `/icons/user-badge.svg`
+                    }
                   />
                 }
               >
-                <Avatar alt="Justin" src="/img/justin.webp" />
+                <Avatar
+                  alt="Justin"
+                  src={
+                    authMember?.memberImage
+                      ? `${serverApi}/${authMember.memberImage}`
+                      : "	http://localhost:3000/icons/default-user.svg"
+                  }
+                />
               </Badge>
 
               <Typography
@@ -183,7 +200,7 @@ export default function OrdersPage() {
                   fontWeight: "500",
                 }}
               >
-                Justin
+                {authMember?.memberNick}
               </Typography>
               <Typography
                 component="p"
@@ -194,7 +211,7 @@ export default function OrdersPage() {
                   fontSize: "20px",
                 }}
               >
-                USER
+                {authMember?.memberType}
               </Typography>
             </Box>
             <div
@@ -220,7 +237,9 @@ export default function OrdersPage() {
                   lineHeight: "24px",
                 }}
               >
-                South Korea, Busan
+                {authMember?.memberAddress
+                  ? authMember.memberAddress
+                  : "no address provided"}
               </Typography>
             </Box>
           </Box>
