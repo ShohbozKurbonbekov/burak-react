@@ -181,11 +181,11 @@ export default function OrdersPage() {
                 }
               >
                 <Avatar
-                  alt="Justin"
+                  alt={authMember?.memberNick}
                   src={
                     authMember?.memberImage
                       ? `${serverApi}/${authMember.memberImage}`
-                      : "	http://localhost:3000/icons/default-user.svg"
+                      : "/icons/default-user.svg"
                   }
                 />
               </Badge>
@@ -239,7 +239,7 @@ export default function OrdersPage() {
               >
                 {authMember?.memberAddress
                   ? authMember.memberAddress
-                  : "no address provided"}
+                  : "don't exist"}
               </Typography>
             </Box>
           </Box>
