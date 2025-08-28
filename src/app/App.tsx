@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Switch, useLocation } from "react-router-dom";
 
 import { Route } from "react-router-dom";
@@ -13,15 +12,14 @@ import HelpPage from "./screens/helpPage/Index";
 import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
-import { CartItem } from "../lib/types/search";
 import useBasket from "./hooks/useBasket";
 import AuthenticationModal from "./components/auth";
 import { T } from "../lib/types/common";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
-import { Message } from "@mui/icons-material";
 import { Messages } from "../lib/config";
 import MemberService from "./services/MemberService";
 import { useGlobals } from "./hooks/useGlobals";
+import { useState } from "react";
 
 function App() {
   const { setAuthMember } = useGlobals();

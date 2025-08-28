@@ -77,7 +77,6 @@ return () => {...} => Cleanup function, runs before unmount or re-run of effect
    */
 
   const { authMember } = useGlobals();
-  console.log("authmember :", authMember);
   return (
     <div className="home-navbar">
       <Container className="navbar-container">

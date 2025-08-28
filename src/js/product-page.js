@@ -1,7 +1,7 @@
 export const showProductsButtons = () => {
   const productsBtns = document.querySelectorAll(".products-button");
 
-  productsBtns.forEach((el, index, arr) => {
+  productsBtns.forEach((el, index) => {
     el.style.marginTop = `calc(${getComputedStyle(el).width} - ${
       index !== 0 ? "21px" : "0px"
     })`;

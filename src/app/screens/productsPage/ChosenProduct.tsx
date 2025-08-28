@@ -76,6 +76,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
   }, []);
 
   if (!chosenProduct) return null;
+
   return (
     <div className={"chosen-product"}>
       <Box className={"title"}>Product Detail</Box>

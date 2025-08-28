@@ -3,7 +3,9 @@ import HomePageReducer from "./screens/HomePage/slice";
 import reduxLogger from "redux-logger";
 import ProductsPageReducer from "./screens/productsPage/slice";
 import OrdersPageReducer from "./screens/ordersPage/slice";
+
 export const store = configureStore({
+  // for logging out the results of the data coming from the  redux store
   middleware: (getDefaultMiddleware) =>
     // @ts-ignore
     getDefaultMiddleware().concat(reduxLogger),

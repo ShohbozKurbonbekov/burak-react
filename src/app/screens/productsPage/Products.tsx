@@ -39,6 +39,7 @@ const brandPictures = [
   { brandPath: "/brand-images/brand3.png" },
   { brandPath: "/brand-images/brand4.png" },
 ];
+
 const actionDispatch = (dispatch: Dispatch) => ({
   setProducts: (data: Product[]) => dispatch(setProducts(data)),
 });
@@ -50,6 +51,7 @@ const productsRetriever = createSelector(retrieveProducts, (products) => ({
 interface ProductsProps {
   onAdd: (item: CartItem) => void;
 }
+
 export default function Products(props: ProductsProps) {
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
@@ -68,8 +70,6 @@ export default function Products(props: ProductsProps) {
 
   useEffect(() => {
     showProductsButtons();
-
-    console.log("productSearch :", productSearch);
 
     const product = new ProductService();
     product
@@ -142,6 +142,7 @@ export default function Products(props: ProductsProps) {
   const chooseProductHandler = (id: string) => {
     history.push(`products/${id}`);
   };
+
   return (
     <div className="products">
       <Container>

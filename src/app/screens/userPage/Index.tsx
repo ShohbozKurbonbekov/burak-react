@@ -17,6 +17,7 @@ import { Messages, serverApi } from "../../../lib/config";
 import { MemberUpdateInput } from "../../../lib/types/member";
 import { useState } from "react";
 import { T } from "../../../lib/types/common";
+
 import {
   sweetErrorHandling,
   sweetTopSmallSuccessAlert,
@@ -71,7 +72,7 @@ export default function UserPage() {
   const handleSaveButton = async () => {
     try {
       if (!authMember) throw new Error(Messages.error2);
-      console.log(memberUpdateInput);
+
       if (
         memberUpdateInput.memberNick === "" ||
         memberUpdateInput.memberPhone === "" ||
