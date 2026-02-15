@@ -28,7 +28,6 @@ class OrderService {
       const result = await axios.post(url, orderItems, {
         withCredentials: true,
       });
-      console.log("orderCreate: ", result);
 
       return result.data;
     } catch (error) {

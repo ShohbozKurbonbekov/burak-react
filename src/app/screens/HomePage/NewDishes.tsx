@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Container, Stack } from "@mui/material";
 import {
   AspectRatio,
@@ -18,7 +17,6 @@ import { ProductCollection } from "../../../lib/enums/product.enum";
 import { retrieveNewDishes } from "./selector";
 
 // REDUX SLICE & SELECTOR
-
 const newDishesRetriever = createSelector(retrieveNewDishes, (newDishes) => ({
   newDishes,
 }));

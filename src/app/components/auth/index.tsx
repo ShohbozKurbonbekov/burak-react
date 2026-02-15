@@ -64,8 +64,6 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
   };
   const handleSignupRequest = async () => {
     try {
-      console.log("inputs: ", memberNick, memberPassword, memberPhone);
-
       const isFullFill = memberNick && memberPassword && memberPhone;
       if (!isFullFill) {
         throw new Error(Messages.error3);
@@ -78,7 +76,6 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
 
       const member = new MemberService();
       const result = await member.signup(signupInput);
-      console.log(result);
 
       // Saving AuthenticatedUser
       setAuthMember(result);

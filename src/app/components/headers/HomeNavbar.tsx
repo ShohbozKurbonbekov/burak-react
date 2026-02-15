@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
-import { useEffect, useState } from "react";
 import { CartItem } from "../../../lib/types/search";
 import { useGlobals } from "../../hooks/useGlobals";
 import { serverApi } from "../../../lib/config";
@@ -43,38 +42,6 @@ export default function HomeNavbar(props: HomeNavbarProps) {
     handleCloseLogout,
     handleLogoutRequest,
   } = props;
-
-  /*
-   1. Run Once on Mount (like componentDidMount).
-   UseCase:
-   =>  Fetching data, set-up listeners. etc
-
-   2. Run on Update (like componentDidUpdate);
-   UseCase:
-   => React to changes in props or state
-   =>  Conditional logic after updates
-
-   3. Run Cleanup on Unmount (like componentWillUnmount)
-   UseCase:
-   =>  Cleanup function runs when component unmounts,
-   
-  return () => {
-    clearInterval(intervalId);
-    console.log("Component unmounted, interval cleared");
-  };
-
-
-
- ✅ Summary of useEffect Behavior:
- [] => 	Only once, after mount;
- [someState] => After mount + whenever someState changes 
-return () => {...} => Cleanup function, runs before unmount or re-run of effect
- 
-✅ Notes:
-=> Your component returns JSX → DOM updates.
-=> Then useEffect() is triggered.
-=> Then the browser paints the result (if needed).
-   */
 
   const { authMember } = useGlobals();
   return (

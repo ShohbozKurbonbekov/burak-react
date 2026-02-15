@@ -87,7 +87,6 @@ export default function UserPage() {
       setAuthMember(data);
 
       await sweetTopSmallSuccessAlert("Modified successfully!", 700);
-      console.log("data", data);
     } catch (error) {
       console.log(error);
       sweetErrorHandling(error).then();

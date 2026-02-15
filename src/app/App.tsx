@@ -49,6 +49,7 @@ function App() {
       sweetErrorHandling(Messages.error1);
     }
   };
+
   return (
     <>
       {location.pathname === "/" ? (

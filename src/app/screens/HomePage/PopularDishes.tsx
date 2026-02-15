@@ -1,4 +1,3 @@
-import React from "react";
 import { Container, Stack, Box } from "@mui/material";
 import { Card, CardContent, CardCover, Typography } from "@mui/joy";
 import { CssVarsProvider } from "@mui/joy/styles";
